@@ -58,7 +58,7 @@
               <div class="col-md-12">
                 <button
                   type="submit"
-                  :disabled="obj.valor<=0 || obj.quant<=0 || obj.servico == ''"
+                  :disabled="Number(obj.valor.replace('R$','').replace(',','.').trim())<=0 || obj.quant<=0 || obj.servico == ''"
                   class="btn btn-success pull-right"
                 >
                   <span class="btn-label">
@@ -242,14 +242,19 @@ export default {
 
       this.total = 0;
       this.model.servicos.forEach(el => {
-        this.total += el.valor * el.quant;
+      let valor = el.valor.replace('R$','').replace(',','.').trim();
+      valor = Number(valor);
+      this.total += valor * el.quant;
       });
     },
     pushOrcamento(evt) {
+      console.log(this.obj.valor);
       evt.preventDefault();
+      let valor = this.obj.valor.replace('R$','').replace(',','.').trim();
+      valor = Number(valor);
       this.obj.index = this.model.servicos.length + 1;
       this.model.servicos.push(JSON.parse(JSON.stringify(this.obj)));
-      this.total += this.obj.valor * this.obj.quant;
+      this.total += valor * this.obj.quant;
       this.obj.servico = "";
       this.obj.valor = 0;
       this.obj.quant = 0;
